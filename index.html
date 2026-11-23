@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CineVault</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="container nav-content">
+      <div class="brand-group">
+        <h1 class="logo">Cine<span>Vault</span></h1>
+      </div>
+
+      <div class="search-stack">
+        <div class="top-action-row">
+          <button id="theme-toggle" class="theme-btn" type="button">☀️ Light</button>
+        </div>
+        <form id="search-form" class="search-box">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search movies or series"
+            required
+          />
+          <button type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-layout">
+    <section class="results-section">
+      <div class="controls-bar">
+        <h2 id="section-title">Results</h2>
+
+        <div class="filters-row">
+          <div class="filter-group">
+            <label for="type-filter">Type:</label>
+            <select id="type-filter">
+              <option value="all">All</option>
+              <option value="movie">Movies</option>
+              <option value="series">Series</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="sort-select">Sort:</label>
+            <select id="sort-select">
+              <option value="default">Default</option>
+              <option value="newest">Year: Newest</option>
+              <option value="oldest">Year: Oldest</option>
+              <option value="title-asc">Title: A–Z</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div id="status-message" class="status-box">
+        Good movies make your life better.
+      </div>
+
+      <div id="movie-grid" class="movie-grid"></div>
+    </section>
+
+    <aside class="watchlist-section">
+      <div class="watchlist-header">
+        <h2>My Watchlist (<span id="watchlist-count">0</span>)</h2>
+        <button id="clear-watchlist" class="btn-clear" type="button">Clear</button>
+      </div>
+      <div id="watchlist-container" class="watchlist-list">
+        <p class="empty-watchlist">No titles saved yet.</p>
+      </div>
+    </aside>
+  </main>
+
+  <div id="movie-modal" class="modal hidden">
+    <div class="modal-content">
+      <button id="close-modal" class="close-btn" type="button">&times;</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
