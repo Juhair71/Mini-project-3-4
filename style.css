@@ -209,7 +209,7 @@ body {
 /* Movie Grid */
 .movie-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1.15rem;
 }
 
@@ -255,7 +255,10 @@ body {
 
 .card-title {
   font-size: 0.98rem;
-  margin-bottom: 0.3rem;
+  line-height: 1.35;
+  margin-bottom: 0.35rem;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .card-meta {
@@ -355,9 +358,9 @@ body {
 
 .watchlist-info h4 {
   font-size: 0.88rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.3;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .watchlist-info span {
@@ -471,6 +474,7 @@ body {
 
 .modal-details h2 {
   margin-bottom: 0.5rem;
+  word-break: break-word;
 }
 
 .modal-details p {
