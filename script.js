@@ -6,12 +6,25 @@ const FALLBACK_POSTER =
     '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="445" viewBox="0 0 300 445"><rect width="300" height="445" fill="#1f2937"/><text x="50%" y="50%" fill="#9ca3af" font-family="Arial, sans-serif" font-size="18" text-anchor="middle" dominant-baseline="middle">No Poster</text></svg>'
   );
 
+// Suggested titles shown on initial load
+const SUGGESTED_TITLES = [
+  'Inception',
+  'Interstellar',
+  'The Dark Knight',
+  'Breaking Bad',
+  'Dune',
+  'Avatar',
+  'Sherlock',
+  'Parasite'
+];
+
 // State
 let currentMovies = [];
 let watchlist = JSON.parse(localStorage.getItem('cineVaultWatchlist')) || [];
 let currentTheme = localStorage.getItem('cineVaultTheme') || 'dark';
 
 // DOM Elements
+const sectionTitle = document.getElementById('section-title');
 const searchForm = document.getElementById('search-form');
 const searchInput = document.getElementById('search-input');
 const typeFilter = document.getElementById('type-filter');
@@ -26,10 +39,11 @@ const movieModal = document.getElementById('movie-modal');
 const modalBody = document.getElementById('modal-body');
 const closeModalBtn = document.getElementById('close-modal');
 
-// Initialize (no default movie search on load)
+// Initialize with suggested movies
 document.addEventListener('DOMContentLoaded', () => {
   applyTheme(currentTheme);
   renderWatchlist();
+  loadSuggestedMovies();
 });
 
 // Theme Toggle
@@ -73,8 +87,33 @@ movieModal.addEventListener('click', (e) => {
   }
 });
 
+// Load Suggested Movies on First Open
+async function loadSuggestedMovies() {
+  sectionTitle.textContent = 'Good movies make your life better';
+  showStatus('Loading suggestions...', false);
+  movieGrid.innerHTML = '';
+
+  try {
+    const requests = SUGGESTED_TITLES.map((title) =>
+      fetch(`${BASE_URL}?apikey=${API_KEY}&t=${encodeURIComponent(title)}`).then((res) => res.json())
+    );
+    const results = await Promise.all(requests);
+    currentMovies = results.filter((item) => item && item.Response === 'True');
+
+    if (currentMovies.length > 0) {
+      hideStatus();
+      renderMovies();
+    } else {
+      showStatus('No suggestions available right now.', false);
+    }
+  } catch (error) {
+    showStatus('Could not load suggestions.', true);
+  }
+}
+
 // Async Fetch with Loading, Empty & Error States
 async function fetchMovies(query) {
+  sectionTitle.textContent = 'Good movies make your life better';
   showStatus('Loading...', false);
   movieGrid.innerHTML = '';
 
@@ -144,7 +183,9 @@ function renderMovies() {
 
       return `
         <article class="movie-card">
-          <img src="${poster}" alt="${movie.Title}" loading="lazy" />
+          <div class="poster-frame">
+            <img src="${poster}" alt="${movie.Title}" loading="lazy" />
+          </div>
           <div class="card-body">
             <h3 class="card-title">${movie.Title}</h3>
             <p class="card-meta">${movie.Year} • ${movie.Type}</p>
@@ -189,7 +230,9 @@ async function fetchMovieDetails(imdbID) {
 
     modalBody.innerHTML = `
       <div class="modal-grid">
-        <img src="${poster}" alt="${movie.Title}" />
+        <div class="modal-poster-box">
+          <img src="${poster}" alt="${movie.Title}" />
+        </div>
         <div class="modal-details">
           <h2>${movie.Title} (${movie.Year})</h2>
           <p><strong>Genre:</strong> ${movie.Genre}</p>
